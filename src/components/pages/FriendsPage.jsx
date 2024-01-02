@@ -9,12 +9,9 @@ export default function FriendsPage({ userFriends }) {
       setFriends((prev) => prev.filter((f) => f.id !== id));
     }
   };
-  const openChatHandler = async (id) => {
-    const response = await fetch(`/api/messages/${id}`, { method: 'GET' });
-    if (response.ok) {
-      console.log('Добавлено');
-    }
-  };
+  // const openChatHandler = async (id) => {
+  //   const response = await fetch(`./message/${id}`, { method: 'GET' });
+  // };
 
   return (
     <div className="container bootstrap snippets bootdey">
@@ -25,7 +22,7 @@ export default function FriendsPage({ userFriends }) {
               key={friend.id}
               friend={friend}
               deleteUserHandler={deleteUserHandler}
-              openChatHandler={openChatHandler}
+              // openChatHandler={openChatHandler}
             />
           ))}
         </ul>

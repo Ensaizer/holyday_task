@@ -12,12 +12,12 @@ import {
   DELETE_MESSAGE_FROM_CLIENT,
 } from '../../ws/actions';
 
-export default function OneChatPage({ friendMessages, userMessages, user: loggedUser }) {
+export default function OneChatPage({ messages, user: loggedUser }) {
   const socketRef = React.useRef(null);
   // const [postsState, setPostsState] = React.useState(posts);
   //   const [users, setUsers] = React.useState([]);
-  const [allPosts, setAllPosts] = React.useState({ friendMessages, userMessages } || {});
-  console.log(allPosts);
+  const [allMessages, setAllMessages] = React.useState(messages || []);
+  // console.log(allPosts);
   const postSubmitHandler = (e) => {
     e.preventDefault();
     if (!e.target.text.value) return;
@@ -36,15 +36,15 @@ export default function OneChatPage({ friendMessages, userMessages, user: logged
     socket.onmessage = (event) => {
       const { type, payload } = JSON.parse(event.data);
       switch (type) {
-        case SET_USERS_FROM_SERVER:
-          console.log(payload);
-          setUsers(payload);
-          break;
+        // case SET_USERS_FROM_SERVER:
+        //   console.log(payload);
+        //   setUsers(payload);
+        //   break;
         case ADD_MESSAGE_FROM_SERVER:
-          setAllPosts((prev) => [...prev, payload]);
+          setAllMessages((prev) => [...prev, payload]);
           break;
         case DELETE_MESSAGE_FROM_SERVER: {
-          setAllPosts((prev) => prev.filter((el) => el.id !== payload));
+          setAllMessages((prev) => prev.filter((el) => el.id !== payload));
           break;
         }
         default:
@@ -71,7 +71,11 @@ export default function OneChatPage({ friendMessages, userMessages, user: logged
         {/* Блок с пользователями в онлайне */}
         {/* <OnlineUsers users={users.filter((el) => el.id !== loggedUser.id)} /> */}
         {/* Блок с постами */}
-        <PostsPart allPosts={allPosts} deletePostHandler={deletePostHandler} user={loggedUser} />
+        <PostsPart
+          allMessages={allMessages}
+          deletePostHandler={deletePostHandler}
+          user={loggedUser}
+        />
       </Row>
       <Row>
         {/* Блок с формой для создания поста */}

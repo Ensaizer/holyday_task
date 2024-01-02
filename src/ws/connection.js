@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { Post, User } from '../../db/models';
+import { Message, User } from '../../db/models';
 import {
   SET_USERS_FROM_SERVER,
   ADD_MESSAGE_FROM_SERVER,
@@ -35,15 +35,15 @@ const connectionCb = (socket, request) => {
       }),
     );
   });
-  console.log(map);
+  // console.log(map);
   
   socket.on('message', async (message) => {
     const { type, payload } = JSON.parse(message); // получили сообщение с клиента
     switch (type) {
       case ADD_MESSAGE_FROM_CLIENT: {
-        console.log(payload, userId);
-        Post.create({ text: payload.text, userId }).then(async (newMessage) => {
-          const includedMessage = await Post.findOne({
+        // console.log(payload, userId);
+        Message.create({ text: payload.text, userId }).then(async (newMessage) => {
+          const includedMessage = await Message.findOne({
             where: { id: newMessage.id },
             include: User,
           });
@@ -60,7 +60,7 @@ const connectionCb = (socket, request) => {
       }
 
       case DELETE_MESSAGE_FROM_CLIENT: {
-        Post.destroy({ where: { id: payload } }).then(async () => {
+        Message.destroy({ where: { id: payload } }).then(async () => {
           map.forEach(({ ws }) => {
             ws.send(
               JSON.stringify({

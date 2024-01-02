@@ -11,9 +11,9 @@ import authRouter from './routes/authRouter';
 import apiFriendsRouter from './routes/apiFriendsRouter';
 import { upgradeCb, wsServer } from './ws/wsServer';
 import connectionCb from './ws/connection';
-import { verifyRefreshToken } from './middlewares/verifyTokens';
+import { verifyRefreshToken, verifyAccessToken } from './middlewares/verifyTokens';
 import { createServer } from 'http';
-
+import messageRouter from './routes/messageRouter';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -31,8 +31,8 @@ app.use(resLocals);
 
 app.use('/', indexRouter);
 app.use('/account', authRouter);
-app.use('/api/account', verifyRefreshToken, apiAuthRouter);
-app.use('/api/friends', verifyRefreshToken, apiFriendsRouter);
+app.use('/api/account', apiAuthRouter);
+app.use('/api/friends', verifyRefreshToken, verifyAccessToken, apiFriendsRouter);
 app.use('/message', messageRouter);
 
 const server = createServer(app);
